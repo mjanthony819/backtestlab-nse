@@ -10,6 +10,12 @@ It is built to be hard to fool yourself with: signals use only past data, trades
 |---|---|
 | ![compare](docs/compare.png) | ![trades](docs/trades.png) |
 
+## ML notebook (Google Colab)
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mjanthony819/backtestlab-nse/blob/main/ml_walk_forward_nse.ipynb)
+
+`ml_walk_forward_nse.ipynb` is the gradient-boosting experiment from [nse-ml-backtest](https://github.com/mjanthony819/nse-ml-backtest), rebuilt as a notebook that runs top to bottom in Colab (about 15 seconds of compute). It retrains every January (a real walk-forward), charges costs, compares against buy-and-hold and the Nifty, and runs a shuffled-label test to show what luck alone produces. Result as of Oct 2026: accuracy about 50%, no edge.
+
 ## What is in it
 
 - **Strategies:** SMA crossover, RSI mean reversion, 12-1 momentum, Bollinger reversion, buy-and-hold baseline. Each is a function from prices to a 0/1 position. Parameters are declared once in `backend/engine/strategies.py` and the frontend builds its forms from `GET /strategies`.
