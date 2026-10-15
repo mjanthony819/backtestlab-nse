@@ -1,6 +1,6 @@
 "use client";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useMeta, ParamSliders } from "@/components/Controls";
+import { useMeta, ParamSliders, Dropdown } from "@/components/Controls";
 import Chart from "@/components/Chart";
 import { ErrorBox, WakeBanner } from "@/components/Banner";
 import { backtest, Query, Result, Strategy } from "@/lib/api";
@@ -73,10 +73,10 @@ function Compare() {
       {err && <ErrorBox msg={err} />}
 
       <div className="box p-4 mb-5 grid md:grid-cols-4 gap-4">
-        <label><div className="cap mb-2">stock</div>
-          <input list="tk2" defaultValue={q.ticker} key={q.ticker} onBlur={(e) => e.target.value.trim() && set({ ticker: e.target.value.trim().toUpperCase() })}
-            onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()} />
-          <datalist id="tk2">{meta.tickers.map((t) => <option key={t.symbol} value={t.symbol}>{t.name}</option>)}</datalist></label>
+        <div><div className="cap mb-2">stock</div>
+          <Dropdown label="Stock" value={q.ticker} searchable
+            options={meta.tickers.map((t) => ({ value: t.symbol, label: t.symbol, detail: t.name }))}
+            onChange={(ticker) => set({ ticker })} /></div>
         <label><div className="cap mb-2">from</div><input type="date" value={q.start} onChange={(e) => set({ start: e.target.value })} /></label>
         <label><div className="cap mb-2">to</div><input type="date" value={q.end} onChange={(e) => set({ end: e.target.value })} /></label>
         <label><div className="flex justify-between"><span className="cap">cost</span><span className="text-[11px] text-ink">{(q.cost_bps / 100).toFixed(2)}%</span></div>
@@ -89,9 +89,9 @@ function Compare() {
             <div className="flex items-center gap-2 mb-3"><i style={{ background: COLORS[i], width: 10, height: 10, display: "inline-block" }} />
               <span className="cap">strategy {i + 1}</span>
               {i === 2 && <button className="ml-auto text-faint hover:text-down text-[11px]" onClick={() => write([slots[0], slots[1], null])}>remove</button>}</div>
-            <select value={sl.strategy} onChange={(e) => write(slots.map((x, j) => (j === i ? { strategy: e.target.value, params: {} } : x)))}>
-              {meta.strategies.filter((s) => s.id !== "buy_hold").map((s: Strategy) => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
+            <Dropdown label={`Strategy ${i + 1}`} value={sl.strategy}
+              options={meta.strategies.filter((s) => s.id !== "buy_hold").map((s: Strategy) => ({ value: s.id, label: s.name }))}
+              onChange={(strategy) => write(slots.map((x, j) => j === i ? { strategy, params: {} } : x))} />
             <div className="mt-4"><ParamSliders strat={meta.strategies.find((s) => s.id === sl.strategy)} values={sl.params}
               onChange={(p) => write(slots.map((x, j) => (j === i ? { ...sl, params: p } : x)))} /></div>
           </div>
