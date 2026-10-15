@@ -1,0 +1,22 @@
+name: update-data
+on:
+  schedule:
+    - cron: "45 11 * * 1-5"   # 17:15 IST on weekdays, after the NSE close
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r backend/requirements.txt
+      - run: python scripts/update_cache.py
+      - name: Commit if changed
+        run: |
+          git config user.name "backtestlab-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add backend/data/cache
+          git diff --cached --quiet || (git commit -m "data: nightly refresh" && git push)
