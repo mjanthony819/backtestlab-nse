@@ -45,6 +45,15 @@ def bollinger_reversion(df, window=20, k=2.0, **_):
                                (df.Close > mid).fillna(False).to_numpy()), index=df.index)
 
 
+
+def donchian(df, entry=55, exit=20, **_):
+    """Long after a close above the prior N-day high, out below the prior M-day low.
+    Both channels use completed days only (shifted), so today's close never feeds its own channel."""
+    hh = df.High.shift(1).rolling(int(entry)).max()
+    ll = df.Low.shift(1).rolling(int(exit)).min()
+    return pd.Series(_stateful((df.Close > hh).fillna(False).to_numpy(),
+                               (df.Close < ll).fillna(False).to_numpy()), index=df.index)
+
 def P(key, label, default, lo, hi, step, help=""):
     return dict(key=key, label=label, default=default, min=lo, max=hi, step=step, help=help)
 
@@ -62,6 +71,9 @@ STRATEGIES = {
     "momentum": dict(name="Momentum (12-1)", fn=momentum,
                      params=[P("lookback", "Lookback (days)", 252, 60, 500, 5), P("skip", "Skip recent (days)", 21, 0, 60, 1)],
                      blurb="Long when the past year's return, skipping the latest month, is positive."),
+    "donchian": dict(name="Donchian breakout", fn=donchian,
+                     params=[P("entry", "Entry channel (days)", 55, 10, 200, 5), P("exit", "Exit channel (days)", 20, 5, 100, 5)],
+                     blurb="Long when price breaks above its past N-day high, out when it falls below the M-day low."),
     "bollinger": dict(name="Bollinger reversion", fn=bollinger_reversion,
                       params=[P("window", "Window (days)", 20, 5, 100, 1), P("k", "Band width (std devs)", 2.0, 0.5, 4.0, 0.1)],
                       blurb="Buy a close below the lower band, sell when price is back at the middle."),
