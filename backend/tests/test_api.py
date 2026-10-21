@@ -10,7 +10,8 @@ def test_tickers_and_strategies():
     t = client.get("/tickers").json()
     assert len(t["tickers"]) >= 40
     s = client.get("/strategies").json()["strategies"]
-    assert {x["id"] for x in s} == {"buy_hold", "sma_cross", "rsi_reversion", "momentum", "bollinger"}
+    # The registry is meant to grow: pin the core strategies, not an exact list.
+    assert {x["id"] for x in s} >= {"buy_hold", "sma_cross", "rsi_reversion", "momentum", "bollinger"}
 
 
 @pytest.mark.parametrize("sid", ["buy_hold", "sma_cross", "rsi_reversion", "momentum", "bollinger"])
