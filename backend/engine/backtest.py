@@ -36,7 +36,11 @@ def drawdown(eq: pd.Series) -> pd.Series:
 
 def sharpe(ret, rf=RF_DAILY):
     sd = np.std(ret, ddof=1)
-    return float((np.mean(ret) - rf) / sd * np.sqrt(252)) if sd > 0 else 0.0
+    # A constant series gives sd ~1e-19 from floating-point noise, not 0: treat
+    # anything below 1e-12 (real daily vol is orders of magnitude larger) as flat.
+    if not sd > 1e-12:
+        return 0.0
+    return float((np.mean(ret) - rf) / sd * np.sqrt(252))
 
 
 def metrics(ret: pd.Series, held: pd.Series | None = None, trades: list | None = None) -> dict:
