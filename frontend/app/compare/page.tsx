@@ -8,7 +8,7 @@ import { parse, useQueryState } from "@/lib/state";
 import { num, pct } from "@/lib/fmt";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const COLORS = ["#3aa4ff", "#4fd1a0", "#c58bff"];
+const COLORS = ["#C6F432", "#4fd1a0", "#c58bff"];
 type Slot = { strategy: string; params: Record<string, number> };
 
 const enc = (s: Slot) => s.strategy + "~" + Object.entries(s.params).map(([k, v]) => `${k}=${v}`).join(",");
@@ -56,13 +56,13 @@ function Compare() {
   const lines = useMemo(() => out.length ? [
     ...out.map((r, i) => ({ name: meta.strategies.find((s) => s.id === r.strategy)?.name ?? r.strategy, color: COLORS[i], values: r.equity, width: 2 })),
     { name: "Buy & hold", color: "#e8b24a", values: out[0].buy_hold_equity, width: 1 },
-    ...(out[0].benchmark_equity ? [{ name: "Nifty 50", color: "#8494a9", values: out[0].benchmark_equity, width: 1, dashed: true }] : []),
+    ...(out[0].benchmark_equity ? [{ name: "Nifty 50", color: "#9A9AA2", values: out[0].benchmark_equity, width: 1, dashed: true }] : []),
   ] : [], [out, meta.strategies]);
 
   const rows = out.length ? [
     ...out.map((r, i) => ({ name: meta.strategies.find((s) => s.id === r.strategy)?.name ?? r.strategy, m: r.metrics, c: COLORS[i], trades: r.trades.length })),
     { name: "Buy & hold", m: out[0].buy_hold_metrics, c: "#e8b24a", trades: 1 },
-    ...(out[0].benchmark_metrics ? [{ name: "Nifty 50", m: out[0].benchmark_metrics, c: "#8494a9", trades: 0 }] : []),
+    ...(out[0].benchmark_metrics ? [{ name: "Nifty 50", m: out[0].benchmark_metrics, c: "#9A9AA2", trades: 0 }] : []),
   ] : [];
 
   return (
