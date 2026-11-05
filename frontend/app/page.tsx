@@ -17,9 +17,9 @@ function Backtest() {
   const [copied, setCopied] = useState(false);
 
   const lines = useMemo(() => res ? [
-    { name: "Strategy", color: "#3aa4ff", values: res.equity, width: 2 },
+    { name: "Strategy", color: "#C6F432", values: res.equity, width: 2 },
     { name: "Buy & hold", color: "#e8b24a", values: res.buy_hold_equity, width: 1 },
-    ...(res.benchmark_equity ? [{ name: "Nifty 50", color: "#8494a9", values: res.benchmark_equity, width: 1, dashed: true }] : []),
+    ...(res.benchmark_equity ? [{ name: "Nifty 50", color: "#9A9AA2", values: res.benchmark_equity, width: 1, dashed: true }] : []),
   ] : [], [res]);
   const dd = useMemo(() => res ? [{ name: "Drawdown", color: "#ff6b7a", values: res.drawdown }] : [], [res]);
   const strat = meta.strategies.find((s) => s.id === q.strategy);
@@ -28,7 +28,7 @@ function Backtest() {
     <div className="pt-6">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-doto text-[34px] font-bold text-ink leading-none">
+          <h1 className="font-serif italic text-[34px] font-normal text-ink leading-none">
             {q.ticker.replace(".NS", "")} <span className="text-blue">/</span> {strat?.name ?? "..."}
           </h1>
           <p className="text-dim text-[12px] mt-2">
