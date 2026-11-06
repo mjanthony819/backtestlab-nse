@@ -104,3 +104,9 @@ def test_bootstrap_ci_brackets_point():
     r = np.random.default_rng(0).normal(0.0006, 0.01, 1500)
     lo, hi = bootstrap_sharpe_ci(r)
     assert lo < hi
+
+
+def test_bootstrap_ci_flat_series_is_zero_not_astronomical():
+    # Regression: a constant series gives resample sd ~1e-19 (not 0), and the old
+    # sd > 0 guard let Sharpe blow up to ~1e16.
+    assert bootstrap_sharpe_ci([0.0002] * 120, draws=50, seed=1) == [0.0, 0.0]
