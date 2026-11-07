@@ -18,11 +18,11 @@ export default function Chart({ dates, lines, height = 360, log = false, area = 
       if (dead || !el.current) return;
       const chart = lc.createChart(el.current, {
         height, autoSize: true,
-        layout: { background: { type: lc.ColorType.Solid, color: "#111113" }, textColor: "#9A9AA2", fontFamily: "Space Mono, monospace", fontSize: 11 },
-        grid: { vertLines: { color: "#131316" }, horzLines: { color: "#131316" } },
-        rightPriceScale: { borderColor: "#2E2E33", mode: log ? lc.PriceScaleMode.Logarithmic : lc.PriceScaleMode.Normal },
-        timeScale: { borderColor: "#2E2E33", fixLeftEdge: true, fixRightEdge: true, rightOffset: 0 },
-        crosshair: { mode: 0, vertLine: { color: "#C6F43255", labelBackgroundColor: "#7FA11C" }, horzLine: { color: "#C6F43255", labelBackgroundColor: "#7FA11C" } },
+        layout: { background: { type: lc.ColorType.Solid, color: "#071A24" }, textColor: "#9A9AA2", fontFamily: "Space Mono, monospace", fontSize: 11 },
+        grid: { vertLines: { color: "#0A2230" }, horzLines: { color: "#0A2230" } },
+        rightPriceScale: { borderColor: "#1A4557", mode: log ? lc.PriceScaleMode.Logarithmic : lc.PriceScaleMode.Normal },
+        timeScale: { borderColor: "#1A4557", fixLeftEdge: true, fixRightEdge: true, rightOffset: 0 },
+        crosshair: { mode: 0, vertLine: { color: "#0297DE55", labelBackgroundColor: "#FC734D" }, horzLine: { color: "#0297DE55", labelBackgroundColor: "#FC734D" } },
         localization: { priceFormatter: f },
       });
       const series = lines.map((l) => {
