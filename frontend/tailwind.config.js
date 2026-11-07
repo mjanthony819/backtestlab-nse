@@ -3,9 +3,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: "#0B0B0C", panel: "#111113", line: "#232326", "line-soft": "#2E2E33",
+        bg: "#02070A", panel: "#071A24", line: "#14384A", "line-soft": "#1A4557",
         ink: "#FFFFFF", body: "#D8D8DC", dim: "#9A9AA2", faint: "#6B6B73",
-        blue: "#C6F432", "blue-deep": "#7FA11C", up: "#4fd1a0", down: "#ff6b7a", amber: "#e8b24a",
+        blue: "#0297DE", "blue-deep": "#FC734D", up: "#4fd1a0", down: "#ff6b7a", amber: "#e8b24a",
       },
       fontFamily: {
         serif: ["'Instrument Serif'", "Georgia", "serif"],
