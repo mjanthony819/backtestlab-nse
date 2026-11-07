@@ -60,15 +60,15 @@ export function Dropdown({ label, value, options, onChange, searchable = false }
       onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) close(); }}>
       <style>{`
         .custom-dropdown { position: relative; width: 100%; min-width: 0; }
-        .custom-trigger { width: 100%; min-height: 44px; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #0B0B0C; border: 1px solid #2E2E33; color: #FFFFFF; padding: 8px; font-size: 12px; }
-        .custom-trigger:focus-visible, .custom-trigger[aria-expanded=true] { outline: 1px solid #C6F432; outline-offset: 1px; }
-        .custom-panel { position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: #111113; border: 1px solid #C6F432; box-shadow: 0 12px 30px #000b; }
-        .custom-search { padding: 8px; border-bottom: 1px solid #2E2E33; }
+        .custom-trigger { width: 100%; min-height: 44px; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #02070A; border: 1px solid #1A4557; color: #FFFFFF; padding: 8px; font-size: 12px; }
+        .custom-trigger:focus-visible, .custom-trigger[aria-expanded=true] { outline: 1px solid #0297DE; outline-offset: 1px; }
+        .custom-panel { position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: #071A24; border: 1px solid #0297DE; box-shadow: 0 12px 30px #000b; }
+        .custom-search { padding: 8px; border-bottom: 1px solid #1A4557; }
         .custom-search input { min-height: 44px; font-size: 16px; }
         .custom-options { max-height: min(280px, 40vh); overflow-y: auto; overscroll-behavior: contain; }
-        .custom-option { display: block; width: 100%; min-height: 44px; padding: 10px; color: #FFFFFF; text-align: left; font-size: 12px; overflow-wrap: anywhere; border-bottom: 1px solid #232326; }
-        .custom-option[data-active=true], .custom-option:hover { background: #24270F; color: #fff; }
-        .custom-option[aria-selected=true] { box-shadow: inset 3px 0 #C6F432; }
+        .custom-option { display: block; width: 100%; min-height: 44px; padding: 10px; color: #FFFFFF; text-align: left; font-size: 12px; overflow-wrap: anywhere; border-bottom: 1px solid #14384A; }
+        .custom-option[data-active=true], .custom-option:hover { background: #062E45; color: #fff; }
+        .custom-option[aria-selected=true] { box-shadow: inset 3px 0 #0297DE; }
         .custom-option small { display: block; color: #9A9AA2; font-size: 10px; }
       `}</style>
       <button ref={trigger} type="button" className="custom-trigger" aria-label={label}
