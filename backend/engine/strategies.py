@@ -94,6 +94,10 @@ def clean_params(sid: str, given: dict | None) -> dict:
         out[p["key"]] = int(v) if float(p["step"]).is_integer() else v
     if sid == "sma_cross" and out["fast"] >= out["slow"]:
         raise ValueError("Fast SMA must be shorter than slow SMA")
+    if sid == "momentum" and out["skip"] >= out["lookback"]:
+        # skip >= lookback makes the momentum ratio identically 0 (or inverted):
+        # the strategy would sit flat forever with no error.
+        raise ValueError("Momentum skip must be shorter than lookback")
     return out
 
 
