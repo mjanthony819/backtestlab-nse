@@ -1,6 +1,7 @@
 """Round-trip trade extraction and strategy parameter clamping."""
 import numpy as np
 import pandas as pd
+import pytest
 
 from engine import backtest as bt
 from engine import strategies as S
@@ -59,3 +60,13 @@ def test_clean_params_clamps_to_declared_ranges():
 
 def test_clean_params_defaults_when_nothing_given():
     assert S.clean_params("momentum", None) == {"lookback": 252, "skip": 21}
+
+
+def test_clean_params_rejects_degenerate_momentum_horizon():
+    # skip >= lookback makes the momentum ratio identically 0: the strategy would
+    # sit flat forever. It must be rejected like fast >= slow on sma_cross.
+    with pytest.raises(ValueError):
+        S.clean_params("momentum", {"lookback": 60, "skip": 60})
+    with pytest.raises(ValueError):
+        S.clean_params("momentum", {"lookback": 60, "skip": 61})
+    assert S.clean_params("momentum", {"lookback": 60, "skip": 59}) == {"lookback": 60, "skip": 59}
