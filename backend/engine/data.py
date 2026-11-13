@@ -2,6 +2,7 @@
 live Yahoo Finance call (unofficial, can rate-limit) that is cached in memory/disk."""
 import json
 import os
+import re
 import time
 from pathlib import Path
 
@@ -33,6 +34,10 @@ NIFTY = {
 
 def yahoo_symbol(t: str) -> str:
     t = t.strip().upper()
+    # The symbol becomes a cache filename, so anything else (slashes, dots beyond the
+    # suffix, spaces) could walk the path out of the cache directory.
+    if not re.fullmatch(r"[A-Z0-9&^][A-Z0-9&.\-]{0,18}(\.NS|\.BO)?", t):
+        raise ValueError(f"Bad ticker {t!r}")
     if t.startswith("^") or t.endswith(".NS") or t.endswith(".BO"):
         return t
     return t + ".NS"
