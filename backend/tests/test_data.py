@@ -1,6 +1,7 @@
 """Price-data cleaning, symbol mapping, and bootstrap short-series/reproducibility."""
 import numpy as np
 import pandas as pd
+import pytest
 
 from engine import data
 from engine.stats import bootstrap_sharpe_ci
@@ -12,6 +13,12 @@ def test_yahoo_symbol_mapping():
     assert data.yahoo_symbol("m&m") == "M&M.NS"
     assert data.yahoo_symbol("^nsei") == "^NSEI"
     assert data.yahoo_symbol("RELIANCE.BO") == "RELIANCE.BO"
+
+
+def test_yahoo_symbol_rejects_path_traversal_and_junk():
+    for bad in ("../main", "a/b", "REL IANCE", "..", "", "x" * 25):
+        with pytest.raises(ValueError):
+            data.yahoo_symbol(bad)
 
 
 def test_cache_filename_escapes_index_and_ampersand():
