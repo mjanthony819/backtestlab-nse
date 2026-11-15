@@ -1,6 +1,5 @@
 """BacktestLab NSE API."""
 import os
-from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -48,12 +47,6 @@ def strategy_list():
 
 def _series(s: pd.Series, nd=5):
     return [round(float(v), nd) for v in s.to_numpy()]
-
-
-@lru_cache(maxsize=256)
-def _signal(ticker, sid, params_key, last_date, n):
-    df, _ = data.load(ticker)
-    return strategies.positions(sid, df, dict(params_key))
 
 
 def compute(req: Req):
