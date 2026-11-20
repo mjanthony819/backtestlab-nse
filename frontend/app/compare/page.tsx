@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useMeta, ParamSliders, Dropdown } from "@/components/Controls";
 import Chart from "@/components/Chart";
 import { ErrorBox, WakeBanner } from "@/components/Banner";
@@ -30,6 +30,7 @@ function Compare() {
   const [out, setOut] = useState<Result[]>([]);
   const [err, setErr] = useState<string | null>(null);
   const [slow, setSlow] = useState(false);
+  const ctl = useRef<AbortController | null>(null);
 
   const write = (next: (Slot | null)[]) => {
     const p = new URLSearchParams(sp.toString());
@@ -40,14 +41,20 @@ function Compare() {
   useEffect(() => {
     if (!meta.strategies.length) return;
     const t = setTimeout(async () => {
+      ctl.current?.abort();
+      const c = new AbortController();
+      ctl.current = c;
       setErr(null);
       const s = setTimeout(() => setSlow(true), 2500);
       try {
         const base: Query = { ...q };
-        const rs = await Promise.all(slots.filter(Boolean).map((sl) => backtest({ ...base, strategy: sl!.strategy, params: sl!.params })));
-        setOut(rs);
-      } catch (e: any) { setErr(e.message); setOut([]); }
-      clearTimeout(s); setSlow(false);
+        const rs = await Promise.all(slots.filter(Boolean).map((sl) => backtest({ ...base, strategy: sl!.strategy, params: sl!.params }, c.signal)));
+        if (!c.signal.aborted) setOut(rs);
+      } catch (e: any) {
+        if (e?.name !== "AbortError") { setErr(e.message); setOut([]); }
+      }
+      clearTimeout(s);
+      if (!c.signal.aborted) setSlow(false);
     }, 350);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
